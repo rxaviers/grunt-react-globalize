@@ -1,0 +1,46 @@
+{
+  "name": "grunt-react-globalize",
+  "version": "0.0.1-pre",
+  "keywords": [
+    "gruntplugin",
+    "globalize",
+    "react",
+    "i18n",
+    "bundle",
+    "bundler",
+    "cldr"
+  ],
+  "description": "I18n support for React applications using Globalize",
+  "homepage": "https://github.com/rxaviers/grunt-react-globalize",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rxaviers/grunt-react-globalize.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/rxaviers/grunt-react-globalize/blob/master/LICENSE-MIT"
+    }
+  ],
+  "author": {
+    "name": "Rafael Xavier de Souza",
+    "email": "rxaviers@gmail.com",
+    "url": "http://rafael.xavier.blog.br"
+  },
+  "main": "tasks/react-globalize.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "dependencies": {
+    "async": "^0.3.0"
+  },
+  "peerDependencies": {
+    "requirejs": "^2.1.x"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-dco": "0.0.3",
+    "matchdep": "*"
+  }
+}
