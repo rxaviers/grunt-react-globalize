@@ -105,7 +105,7 @@ module.exports = function(grunt) {
           var current, merged;
           var aux = {};
           var dest = varReplace(module.messages, {locale: locale});
-          current = grunt.file.readJSON(dest) || {};
+          current = grunt.file.exists(dest) ? grunt.file.readJSON(dest) : {};
           aux[locale] = ReactGlobalize.defaultMessages[options.defaultLocale];
           merged = merge({}, aux, current);
           if (orderedStringify(current) !== orderedStringify(merged)) {
