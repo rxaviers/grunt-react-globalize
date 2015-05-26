@@ -217,12 +217,7 @@ module.exports = function(grunt) {
       };
     }
 
-    if (args.length && args[0] === "extract") {
-      actions = [loadCldr, generateTranslationTemplate];
-    } else {
-      actions = [loadCldr, generateBundles];
-    }
-    async.series(actions, function(error) {
+    async.series([loadCldr, generateTranslationTemplate, generateBundles], function(error) {
       if (error) {
         grunt.log.error(error);
         return done(error);
