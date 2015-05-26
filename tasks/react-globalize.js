@@ -97,6 +97,16 @@ module.exports = function(grunt) {
         grunt.file.mkdir(path.dirname(dest));
         fs.writeFileSync(dest, orderedStringify(ReactGlobalize.defaultMessages));
         grunt.log.writeln("Generated `" + dest + "`");
+
+        // Populate new translations for other locales using default.
+        options.locales.filter(function(locale) {
+          return locale !== options.defaultLocale;
+        }).forEach(function(locale) {
+          var merged;
+          var dest = varReplace(module.messages, {locale: locale});
+          merged = merge({}, ReactGlobalize.defaultMessages, grunt.file.readJSON(dest));
+          fs.writeFileSync(dest, orderedStringify(merged));
+        });
       });
       callback();
     }
@@ -111,6 +121,36 @@ module.exports = function(grunt) {
         return callback();
       }
       options.loadCldr.call(scope, options.locales, callback);
+    }
+
+    // Returns new deeply merged JSON.
+    //
+    // Eg.
+    // merge({ a: { b: 1, c: 2 } }, { a: { b: 3, d: 4 } })
+    // -> { a: { b: 3, c: 2, d: 4 } }
+    //
+    // @arguments JSON's
+    // 
+    // Borrowed from cldrjs.
+    function merge() {
+      var destination = {};
+      var sources = [].slice.call(arguments, 0);
+      sources.forEach(function(source) {
+        var prop;
+        for (prop in source) {
+          if (prop in destination && Array.isArray(destination[prop])) {
+            // Concat Arrays
+            destination[prop] = destination[prop].concat(source[prop]);
+          } else if (prop in destination && typeof destination[prop] === "object") {
+            // Merge Objects
+            destination[prop] = merge(destination[prop], source[prop]);
+          } else {
+            // Set new values
+            destination[prop] = source[prop];
+          }
+        }
+      });
+      return destination;
     }
 
     function orderedStringify(obj) {
