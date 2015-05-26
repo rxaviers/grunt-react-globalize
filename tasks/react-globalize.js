@@ -102,9 +102,11 @@ module.exports = function(grunt) {
         options.locales.filter(function(locale) {
           return locale !== options.defaultLocale;
         }).forEach(function(locale) {
+          var aux = {};
           var merged;
           var dest = varReplace(module.messages, {locale: locale});
-          merged = merge({}, ReactGlobalize.defaultMessages, grunt.file.readJSON(dest));
+          aux[locale] = ReactGlobalize.defaultMessages[options.defaultLocale];
+          merged = merge({}, aux, grunt.file.readJSON(dest));
           fs.writeFileSync(dest, orderedStringify(merged));
         });
       });
