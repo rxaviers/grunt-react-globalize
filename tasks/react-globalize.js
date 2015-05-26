@@ -115,9 +115,9 @@ module.exports = function(grunt) {
 
     function orderedStringify(obj) {
       return JSON.stringify(obj, function(key, value) {
-        if (value instanceof Object) {
-          return Object.keys(obj).sort().reduce(function(ret, key) {
-            ret[key] = obj[key];
+        if (value instanceof Object && !Array.isArray(value)) {
+          return Object.keys(value).sort().reduce(function(ret, key) {
+            ret[key] = value[key];
             return ret;
           }, {});
         }
