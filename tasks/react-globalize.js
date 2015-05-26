@@ -95,7 +95,7 @@ module.exports = function(grunt) {
 
         // Generate translation template.
         grunt.file.mkdir(path.dirname(dest));
-        fs.writeFileSync(dest, JSON.stringify(ReactGlobalize.defaultMessages, null, "  "));
+        fs.writeFileSync(dest, orderedStringify(ReactGlobalize.defaultMessages));
         grunt.log.writeln("Generated `" + dest + "`");
       });
       callback();
@@ -111,6 +111,14 @@ module.exports = function(grunt) {
         return callback();
       }
       options.loadCldr.call(scope, options.locales, callback);
+    }
+
+    function orderedStringify(obj) {
+      var newObj = Object.keys(obj).sort().reduce(function(ret, key) {
+        ret[key] = obj[key];
+        return ret;
+      }, {});
+      return JSON.stringify(newObj, null, "  "));
     }
 
     function varReplace(string, vars) {
