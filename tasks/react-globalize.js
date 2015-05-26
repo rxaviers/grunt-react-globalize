@@ -102,12 +102,16 @@ module.exports = function(grunt) {
         options.locales.filter(function(locale) {
           return locale !== options.defaultLocale;
         }).forEach(function(locale) {
+          var current, merged;
           var aux = {};
-          var merged;
           var dest = varReplace(module.messages, {locale: locale});
+          current = grunt.file.readJSON(dest);
           aux[locale] = ReactGlobalize.defaultMessages[options.defaultLocale];
-          merged = merge({}, aux, grunt.file.readJSON(dest));
-          fs.writeFileSync(dest, orderedStringify(merged));
+          merged = merge({}, aux, current);
+          if (orderedStringify(current) !== orderedStringify(merged)) {
+            fs.writeFileSync(dest, orderedStringify(merged));
+            grunt.log.writeln("Populated new fields for `" + dest + "`");
+          }
         });
       });
       callback();
