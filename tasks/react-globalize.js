@@ -118,7 +118,7 @@ module.exports = function(grunt) {
         ret[key] = obj[key];
         return ret;
       }, {});
-      return JSON.stringify(newObj, null, "  "));
+      return JSON.stringify(newObj, null, "  ");
     }
 
     function varReplace(string, vars) {
