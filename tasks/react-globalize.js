@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         // Generate translation template.
         grunt.file.mkdir(path.dirname(dest));
         fs.writeFileSync(dest, orderedStringify(ReactGlobalize.defaultMessages));
-        grunt.log.writeln("Generated `" + dest + "`");
+        grunt.log.writeln("Generated `" + dest + "` using the default translation");
 
         // Populate new translations for other locales using default.
         options.locales.filter(function(locale) {
