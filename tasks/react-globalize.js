@@ -114,11 +114,15 @@ module.exports = function(grunt) {
     }
 
     function orderedStringify(obj) {
-      var newObj = Object.keys(obj).sort().reduce(function(ret, key) {
-        ret[key] = obj[key];
-        return ret;
-      }, {});
-      return JSON.stringify(newObj, null, "  ");
+      return JSON.stringify(obj, function(key, value) {
+        if (value instanceof Object) {
+          return Object.keys(obj).sort().reduce(function(ret, key) {
+            ret[key] = obj[key];
+            return ret;
+          }, {});
+        }
+        return value;
+      }, "  ");
     }
 
     function varReplace(string, vars) {
