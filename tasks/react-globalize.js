@@ -110,7 +110,7 @@ module.exports = function(grunt) {
           merged = merge({}, aux, current);
           if (orderedStringify(current) !== orderedStringify(merged)) {
             fs.writeFileSync(dest, orderedStringify(merged));
-            grunt.log.writeln("Populated `" + dest + "` (new fields) using the default translation");
+            grunt.log.writeln("Populated the new fields of `" + dest + "` using the default translation");
           }
         });
       });
@@ -132,8 +132,8 @@ module.exports = function(grunt) {
     // Returns new deeply merged JSON.
     //
     // Eg.
-    // merge({ a: { b: 1, c: 2 } }, { a: { b: 3, d: 4 } })
-    // -> { a: { b: 3, c: 2, d: 4 } }
+    // merge({a: {b: 1, c: 2}}, {a: {b: 3, d: 4}})
+    // -> {a: {b: 3, c: 2, d: 4}}
     //
     // @arguments JSON's
     // 
