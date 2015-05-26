@@ -67,7 +67,7 @@ module.exports = function(grunt) {
 
           grunt.file.mkdir(path.dirname(dest));
           fs.writeFileSync(dest, builtContent);
-          grunt.log.writeln("Generated `" + dest + "`");
+          grunt.log.writeln("Generated `" + dest + "`.");
 
           // Cleanup.
           Globalize.cache = {};
@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         // Generate translation template.
         grunt.file.mkdir(path.dirname(dest));
         fs.writeFileSync(dest, orderedStringify(ReactGlobalize.defaultMessages));
-        grunt.log.writeln("Generated `" + dest + "` using the default translation");
+        grunt.log.writeln("Generated `" + dest + "` using the default translation.");
 
         // Populate new translations for other locales using default.
         options.locales.filter(function(locale) {
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
           merged = merge({}, aux, current);
           if (orderedStringify(current) !== orderedStringify(merged)) {
             fs.writeFileSync(dest, orderedStringify(merged));
-            grunt.log.writeln("Populated the new fields of `" + dest + "` using the default translation");
+            grunt.log.writeln("Populated the new fields of `" + dest + "` using the default translation.");
           }
         });
       });
