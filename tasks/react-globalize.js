@@ -110,7 +110,7 @@ module.exports = function(grunt) {
           merged = merge({}, aux, current);
           if (orderedStringify(current) !== orderedStringify(merged)) {
             fs.writeFileSync(dest, orderedStringify(merged));
-            grunt.log.writeln("Populated new fields for `" + dest + "`");
+            grunt.log.writeln("Populated `" + dest + "` (new fields) using the default translation");
           }
         });
       });
