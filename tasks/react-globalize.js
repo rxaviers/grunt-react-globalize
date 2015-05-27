@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           messages.push(grunt.file.readJSON(varReplace(module.messages, {locale: locale})));
 
           // Concat reactElements.
-          [].push.apply(reactElements, module.reactElements);
+          reactElements.push(module.reactElements);
         });
         iterator(messages, reactElements, dest);
       });
