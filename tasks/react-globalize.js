@@ -76,7 +76,7 @@ module.exports = function(grunt) {
           var translation = grunt.file.exists(dest) ? grunt.file.readJSON(dest) : {};
           translation = compiler.initOrUpdateTranslation(locale, translation, defaultTranslation);
           if (translation) {
-            fs.writeFileSync(dest, translation);
+            fs.writeFileSync(dest, compiler.stringify(translation));
             grunt.log.writeln("Populated the new fields of `" + dest + "` using the default translation.");
           }
         });
