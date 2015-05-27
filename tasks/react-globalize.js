@@ -10,6 +10,7 @@
 
 module.exports = function(grunt) {
 
+  var assert = require("assert");
   var fs = require("fs");
   var path = require("path");
 
@@ -28,7 +29,7 @@ module.exports = function(grunt) {
           messages = grunt.file.readJSON(varReplace(module.messages, {locale: locale}));
 
           // Load messages.
-          Globalize.loadMessages(messages);
+          compiler.Globalize.loadMessages(messages);
 
           // Concat reactElements.
           [].push.apply(reactElements, module.reactElements.call(compiler.scope));
@@ -53,7 +54,7 @@ module.exports = function(grunt) {
       });
     }
 
-    function generateTranslationTable(callback) {
+    function generateTranslationTable() {
       Object.keys(options.modules).map(function(module) {
         var defaultTranslation, dest, reactElements;
         module = options.modules[module];
@@ -100,7 +101,7 @@ module.exports = function(grunt) {
       assert(Array.isArray(options.build[name]), "build[\"" + name + "\"] must define an Array of modules (e.g., {\"dist/{locale}.js\": [\"app\"]})");
     });
 
-    reactGlobalizeCompiler = new require("react-globalize-compiler")(options);
+    compiler = new require("react-globalize-compiler")(options);
     generateTranslationTable();
     generateBundles();
   });
