@@ -22,28 +22,26 @@ module.exports = function(grunt) {
       Object.keys(options.build).forEach(function(dest) {
         var modules = options.build[dest];
         var reactElements = [];
+        var messages = [];
         modules.forEach(function(module) {
-          var messages;
 
+          // Concat messages.
           module = options.modules[module];
-          messages = grunt.file.readJSON(varReplace(module.messages, {locale: locale}));
-
-          // Load messages.
-          compiler.Globalize.loadMessages(messages);
+          messages.push(grunt.file.readJSON(varReplace(module.messages, {locale: locale})));
 
           // Concat reactElements.
-          [].push.apply(reactElements, module.reactElements.call(compiler.scope));
+          [].push.apply(reactElements, module.reactElements);
         });
-        iterator(reactElements, dest);
+        iterator(messages, reactElements, dest);
       });
     }
 
     function generateBundles() {
       options.locales.forEach(function(locale) {
-        forEachBuild(locale, function(reactElements, dest) {
+        forEachBuild(locale, function(messages, reactElements, dest) {
 
           // Generate bundle.
-          var builtContent = compiler.generateBundle(locale, reactElements, {
+          var builtContent = compiler.generateBundle(locale, messages, reactElements, {
             onBuildWrite: options.onBuildWrite
           });
           dest = varReplace(dest, {locale: locale});
@@ -56,14 +54,13 @@ module.exports = function(grunt) {
 
     function generateTranslationTable() {
       Object.keys(options.modules).map(function(module) {
-        var defaultTranslation, dest, reactElements;
+        var defaultTranslation, dest;
         module = options.modules[module];
 
         dest = varReplace(module.messages, {locale: options.defaultLocale});
-        reactElements = module.reactElements.call(compiler.scope);
 
         // Generate translation template.
-        defaultTranslation = compiler.generateDefaultTranslation(options.defaultLocale, reactElements);
+        defaultTranslation = compiler.generateDefaultTranslation(options.defaultLocale, module.reactElements);
         grunt.file.mkdir(path.dirname(dest));
         fs.writeFileSync(dest, compiler.stringify(defaultTranslation));
         grunt.log.writeln("Generated `" + dest + "` using the default translation.");
@@ -74,7 +71,7 @@ module.exports = function(grunt) {
         }).forEach(function(locale) {
           var dest = varReplace(module.messages, {locale: locale});
           var translation = grunt.file.exists(dest) ? grunt.file.readJSON(dest) : {};
-          translation = compiler.initOrUpdateTranslation(locale, translation, defaultTranslation);
+          translation = compiler.initOrUpdateTranslation(locale, translation, options.defaultLocale);
           if (translation) {
             fs.writeFileSync(dest, compiler.stringify(translation));
             grunt.log.writeln("Populated the new fields of `" + dest + "` using the default translation.");
@@ -101,7 +98,11 @@ module.exports = function(grunt) {
       assert(Array.isArray(options.build[name]), "build[\"" + name + "\"] must define an Array of modules (e.g., {\"dist/{locale}.js\": [\"app\"]})");
     });
 
-    compiler = new (require("react-globalize-compiler"))(options);
+    compiler = require("react-globalize-compiler");
+
+    if (options.amd) {
+      compiler.amd(options.amd.config);
+    }
     generateTranslationTable();
     generateBundles();
   });
