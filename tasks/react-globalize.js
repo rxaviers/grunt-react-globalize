@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         reactElements = module.reactElements.call(compiler.scope);
 
         // Generate translation template.
-        defaultTranslation = compiler.generateDefaultTranslation();
+        defaultTranslation = compiler.generateDefaultTranslation(options.defaultLocale, reactElements);
         grunt.file.mkdir(path.dirname(dest));
         fs.writeFileSync(dest, defaultTranslation);
         grunt.log.writeln("Generated `" + dest + "` using the default translation.");
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
       assert(Array.isArray(options.build[name]), "build[\"" + name + "\"] must define an Array of modules (e.g., {\"dist/{locale}.js\": [\"app\"]})");
     });
 
-    compiler = new require("react-globalize-compiler")(options);
+    compiler = new (require("react-globalize-compiler"))(options);
     generateTranslationTable();
     generateBundles();
   });
